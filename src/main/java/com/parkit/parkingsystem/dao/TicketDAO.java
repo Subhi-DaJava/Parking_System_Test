@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class TicketDAO {
 
@@ -30,14 +27,14 @@ public class TicketDAO {
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
+            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())) );
             return ps.execute();
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        return false;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -65,8 +62,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -86,4 +83,48 @@ public class TicketDAO {
         }
         return false;
     }
+
+    /**
+     * Methode verify the vehicle recurrent in the parking
+     * @param  vehicleRegNumber check the vehicle is parked before or no.
+     * @return true means,the vehicle has been parked once min.
+     */
+    public boolean checkByVehicleRegNumber(String vehicleRegNumber){
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.VERIFY_REG_NUMBER);
+            ps.setString(1,vehicleRegNumber);
+            return ps.executeQuery().next();
+        }catch (Exception ex){
+            logger.error("Error comparing ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+
+    /**
+     * check vehicle is or is not in the parking.
+     * @param vehicleRegNumber
+     * @return true means the vehicle is here now.
+     */
+    public boolean checkByVehicleRegNumberIfVehicleParkedOrNot(String vehicleRegNumber){
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET);
+            ps.setString(1,vehicleRegNumber);
+            return ps.executeQuery().next();
+        }catch (Exception ex){
+
+            logger.error("Error comparing ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+
+
+
 }

@@ -13,11 +13,11 @@ public class DataBaseConfig {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod","root","rootroot");
+                "jdbc:mysql://localhost:3306/prod?serverTimezone=Europe/Paris","root","routrout");
     }
 
     public void closeConnection(Connection con){
-        if(con!=null){
+        if(con != null){
             try {
                 con.close();
                 logger.info("Closing DB connection");
@@ -28,7 +28,7 @@ public class DataBaseConfig {
     }
 
     public void closePreparedStatement(PreparedStatement ps) {
-        if(ps!=null){
+        if(ps != null){
             try {
                 ps.close();
                 logger.info("Closing Prepared Statement");
