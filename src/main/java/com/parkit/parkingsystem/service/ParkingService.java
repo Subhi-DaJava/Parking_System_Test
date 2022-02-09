@@ -35,7 +35,6 @@ public class ParkingService {
 
                 String vehicleRegNumber = getVehicleRegNumber();
 
-
                 boolean isAlreadyParked = ticketDAO.isVehicleAlreadyParked(vehicleRegNumber);
                 if (isAlreadyParked) {
                     System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now.\n");
@@ -105,7 +104,7 @@ public class ParkingService {
      * This method ask the client the type of his vehicle
      * @return ParkingType
      */
-    private ParkingType getVehicleType(){
+    public ParkingType getVehicleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");

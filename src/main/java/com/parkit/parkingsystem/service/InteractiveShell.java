@@ -1,5 +1,4 @@
 package com.parkit.parkingsystem.service;
-
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
@@ -7,18 +6,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
-
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
+    private static InputReaderUtil inputReaderUtil = new InputReaderUtil();
+    private static  ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
+    private static  TicketDAO ticketDAO = new TicketDAO();
+    private static  ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    public static void setInputReaderUtil(InputReaderUtil inputReaderUtil) {
+        InteractiveShell.inputReaderUtil = inputReaderUtil;
+    }
+    public InteractiveShell(){
+        InteractiveShell.inputReaderUtil = inputReaderUtil;
+        InteractiveShell.parkingSpotDAO = parkingSpotDAO;
+        InteractiveShell.ticketDAO = ticketDAO;
+        InteractiveShell.parkingService=parkingService;
+    }
 
     public static void loadInterface() throws Exception {
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
 
         boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil();
-        ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-        TicketDAO ticketDAO = new TicketDAO();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
         while(continueApp){
             loadMenu();
@@ -48,5 +55,6 @@ public class InteractiveShell {
         System.out.println("2 Vehicle Exiting - Generate Ticket Price");
         System.out.println("3 Shutdown System");
     }
+
 
 }
